@@ -11,6 +11,10 @@ export const app = {
       state['ws'] = payload;
       return state;
     },
+    saveSymbol(state, payload) {
+      state['symbol'] = payload;
+      return state;
+    },
     addTickerData(state, payload) {
       state['ticker'][state.symbol] = [
         ...payload.result,
@@ -60,29 +64,57 @@ export const app = {
       };
       dispatch.app.setWS(ws);
     },
-    initSymbol() {
-      dispatch.app.subscribeToSymbol();
+    setSymbol(payload, rootState) {
+      dispatch.app.unsubscribe();
+      dispatch.app.saveSymbol(payload);
+      dispatch.app.initSymbol();
     },
-    subscribeToSymbol(payload, rootState) {
+    initSymbol() {
+      dispatch.app.subscribe();
+    },
+    unsubscribe(payload, rootState) {
       const {
-        app: { ws }
+        app: { ws, symbol }
+      } = rootState;
+      let msg = JSON.stringify({
+        event: 'unsubscribe',
+        channel: 'ticker',
+        symbol
+      });
+      ws.send(msg);
+      let msg2 = JSON.stringify({
+        event: 'unsubscribe',
+        channel: 'trades',
+        symbol
+      });
+      ws.send(msg2);
+      let msg3 = JSON.stringify({
+        event: 'unsubscribe',
+        channel: 'book',
+        symbol
+      });
+      ws.send(msg3);
+    },
+    subscribe(payload, rootState) {
+      const {
+        app: { ws, symbol }
       } = rootState;
       let msg = JSON.stringify({
         event: 'subscribe',
         channel: 'ticker',
-        symbol: 'tBTCUSD'
+        symbol
       });
       ws.send(msg);
       let msg2 = JSON.stringify({
         event: 'subscribe',
         channel: 'trades',
-        symbol: 'tBTCUSD'
+        symbol
       });
       ws.send(msg2);
       let msg3 = JSON.stringify({
         event: 'subscribe',
         channel: 'book',
-        symbol: 'tBTCUSD'
+        symbol
       });
       ws.send(msg3);
     },
