@@ -7,17 +7,17 @@ import TradeTable from '../components/Trade';
 function Page(props) {
   console.log('page', props);
   return (
-    <View>
+    <View style={{ padding: 6 }}>
       <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginTop: 36,
+          marginTop: 18,
           padding: 9
         }}
       >
-        <Text>{props.symbol}</Text>
+        <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{props.symbol}</Text>
         <Button title="Press me" onPress={props.initSymbol} />
       </View>
       <Ticker tickerData={props.tickerData} symbol={props.symbol} />

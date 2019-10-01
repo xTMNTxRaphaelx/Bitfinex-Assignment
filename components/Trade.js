@@ -9,24 +9,58 @@ import {
 import { Table, Row, Rows } from 'react-native-table-component';
 
 function Trade({ tradeData = [] }) {
-  console.log('is trading', tradeData);
   const tableHead = ['TIME', 'AMOUNT', 'PRICE'];
   const tableData = tradeData.map(data => {
     const [id, ...rest] = data;
+    const time = new Date(rest[0]);
+    rest[0] = time.toTimeString();
     return rest;
   });
   return (
-    <Collapse>
+    <Collapse style={{ backgroundColor: '#18262e', marginTop: 16 }}>
       <CollapseHeader>
-        <View>
-          <Text>Trade</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: 6
+          }}
+        >
+          <Text
+            style={{
+              color: '#fff',
+              fontSize: 21,
+              textTransform: 'uppercase',
+              fontWeight: 'bold'
+            }}
+          >
+            Trade
+          </Text>
+          <Text style={{ color: '#fff', fontSize: 21 }}>Market</Text>
         </View>
       </CollapseHeader>
       <CollapseBody>
         <ScrollView>
-          <Table borderStyle={{ borderWidth: 2, borderColor: '#c8e1ff' }}>
-            <Row data={tableHead} />
-            <Rows data={tableData} />
+          <Table
+            borderStyle={{
+              borderColor: '#fff'
+            }}
+          >
+            <Row data={tableHead} textStyle={{ color: '#fff' }} />
+            {tableData.map((rowData, index) => (
+              <Row
+                key={index}
+                data={rowData}
+                style={
+                  rowData[1] > 0
+                    ? { backgroundColor: 'green' }
+                    : { backgroundColor: 'red' }
+                }
+                textStyle={{ color: '#fff' }}
+              />
+            ))}
+            <Rows textStyle={{ color: '#fff' }} data={tableData} />
           </Table>
         </ScrollView>
       </CollapseBody>
