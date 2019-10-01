@@ -796,6 +796,10 @@
     xcode "^2.0.0"
     xmldoc "^0.4.0"
 
+"@react-native-community/netinfo@^4.3.0":
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-4.3.0.tgz#0fec726ad6e8af381942844f885a2edbbdf05740"
+
 "@rematch/core@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@rematch/core/-/core-1.2.0.tgz#9583cb12368296682061fadb1b3278164a05e5fb"

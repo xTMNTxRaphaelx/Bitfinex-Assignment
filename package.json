@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-community/netinfo": "^4.3.0",
     "@rematch/core": "^1.2.0",
     "@rematch/immer": "^1.1.2",
     "accordion-collapse-react-native": "^0.1.11",

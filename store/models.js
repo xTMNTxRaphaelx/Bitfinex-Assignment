@@ -1,12 +1,19 @@
+import NetInfo from '@react-native-community/netinfo';
+
 export const app = {
   state: {
     ws: null,
+    isOnline: false,
     ticker: {},
     trades: {},
     books: {},
     symbol: 'tBTCUSD'
   }, // initial state
   reducers: {
+    setConnection(state, payload) {
+      state['isOnline'] = payload;
+      return state;
+    },
     setWS(state, payload) {
       state['ws'] = payload;
       return state;
@@ -39,30 +46,47 @@ export const app = {
   },
   effects: dispatch => ({
     initWS(payload, rootState) {
-      const ws = new WebSocket('wss://api-pub.bitfinex.com/ws/2');
-      const subscribtions = {};
-      ws.onmessage = e => {
-        const res = JSON.parse(e.data);
-        if (res.event === 'subscribed') {
-          const chanID = res.chanId;
-          const channel = res.channel;
-          subscribtions[chanID] = channel;
-        } else {
-          const chanID = res[0];
-          const channelType = subscribtions[chanID];
-          if (channelType === 'ticker') {
-            dispatch.app.addTickerData({ result: res[1] });
-          } else if (channelType === 'trades') {
-            dispatch.app.addTradeData({
-              result: res.length === 3 ? [res[2]] : res[1]
-            });
-          } else if (channelType === 'books') {
-            dispatch.app.addOrderBook({ result: res[1] });
-          }
-          // console.log(res);
+      NetInfo.fetch().then(state => {
+        if (state.isConnected) {
+          const ws = new WebSocket('wss://api-pub.bitfinex.com/ws/2');
+          const subscribtions = {};
+          ws.onopen = function() {
+            dispatch.app.setWS(ws);
+            dispatch.app.setConnection(true);
+            dispatch.app.initSymbol();
+          };
+          ws.onmessage = e => {
+            const res = JSON.parse(e.data);
+            if (res.event === 'subscribed') {
+              const chanID = res.chanId;
+              const channel = res.channel;
+              subscribtions[chanID] = channel;
+            } else {
+              const chanID = res[0];
+              const channelType = subscribtions[chanID];
+              if (channelType === 'ticker') {
+                dispatch.app.addTickerData({ result: res[1] });
+              } else if (channelType === 'trades') {
+                dispatch.app.addTradeData({
+                  result: res.length === 3 ? [res[2]] : res[1]
+                });
+              } else if (channelType === 'books') {
+                dispatch.app.addOrderBook({ result: res[1] });
+              }
+              // console.log(res);
+            }
+          };
+          ws.onclose = function(e) {
+            dispatch.app.setConnection(false);
+            setTimeout(function() {
+              dispatch.app.initWS();
+            }, 5000);
+          };
+          ws.onerror = function(err) {
+            ws.close();
+          };
         }
-      };
-      dispatch.app.setWS(ws);
+      });
     },
     setSymbol(payload, rootState) {
       dispatch.app.unsubscribe();
@@ -76,6 +100,7 @@ export const app = {
       const {
         app: { ws, symbol }
       } = rootState;
+      if (!symbol) return;
       let msg = JSON.stringify({
         event: 'unsubscribe',
         channel: 'ticker',

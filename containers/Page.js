@@ -29,6 +29,7 @@ function Page(props) {
         <Button title="Load" onPress={props.initSymbol} />
       </View>
       <Ticker tickerData={props.tickerData} symbol={props.symbol} />
+      <Text>{props.isOnline ? 'Online' : 'OFfline'}</Text>
       <TradeTable tradeData={props.tradeData} />
       <OrderTable orderData={props.orderData} />
       <Modal
@@ -56,10 +57,11 @@ function Page(props) {
 }
 
 export default connect(
-  ({ app: { ticker, trades, books, symbol } }) => ({
+  ({ app: { isOnline, ticker, trades, books, symbol } }) => ({
     tickerData: ticker[symbol],
     tradeData: trades[symbol],
     orderData: books[symbol],
+    isOnline,
     symbol
   }),
   dispatch => ({
