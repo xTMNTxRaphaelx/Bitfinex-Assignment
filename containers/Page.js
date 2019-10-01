@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Button } from 'react-native';
 import { connect } from 'react-redux';
 import Ticker from '../components/Ticker';
 import TradeTable from '../components/Trade';
+import OrderTable from '../components/Order';
 
 function Page(props) {
   console.log('page', props);
@@ -22,14 +23,16 @@ function Page(props) {
       </View>
       <Ticker tickerData={props.tickerData} symbol={props.symbol} />
       <TradeTable tradeData={props.tradeData} />
+      <OrderTable orderData={props.orderData} />
     </View>
   );
 }
 
 export default connect(
-  ({ app: { ticker, trade, symbol } }) => ({
+  ({ app: { ticker, trade, order, symbol } }) => ({
     tickerData: ticker[symbol],
     tradeData: trade[symbol],
+    orderData: order[symbol],
     symbol
   }),
   dispatch => ({ initSymbol: dispatch.app.initSymbol })
