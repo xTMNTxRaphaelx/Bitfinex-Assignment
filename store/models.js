@@ -2,6 +2,7 @@ export const app = {
   state: {
     ticker: {},
     trade: {},
+    order: {},
     symbol: 'tBTCUSD'
   }, // initial state
   reducers: {
@@ -12,12 +13,17 @@ export const app = {
     addTradeData(state, payload) {
       state['trade'][state.symbol] = payload.result;
       return state;
+    },
+    addOrderBook(state, payload) {
+      state['order'][state.symbol] = payload.result;
+      return state;
     }
   },
   effects: dispatch => ({
     initSymbol() {
       dispatch.app.getTickerData();
       dispatch.app.getTradeData();
+      dispatch.app.getOrderBook();
     },
     async getTickerData(payload, rootState) {
       const req = await fetch(
@@ -32,6 +38,13 @@ export const app = {
       );
       const res = await req.json();
       dispatch.app.addTradeData({ result: res });
+    },
+    async getOrderBook(payload, rootState) {
+      const req = await fetch(
+        `https://api-pub.bitfinex.com/v2/book/${rootState.app.symbol}/P0`
+      );
+      const res = await req.json();
+      dispatch.app.addOrderBook({ result: res });
     }
   })
 };
