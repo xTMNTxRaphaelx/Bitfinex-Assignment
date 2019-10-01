@@ -30,7 +30,6 @@ export const app = {
       return state;
     },
     addTradeData(state, payload) {
-      console.log('add trade data', payload);
       if (payload.result === 'hb') return state;
       state['trades'][state.symbol] = [
         ...payload.result,
@@ -43,6 +42,7 @@ export const app = {
         ...payload.result,
         ...(state['books'][state.symbol] || [])
       ];
+      // console.log('orderbook', state);
       return state;
     }
   },
@@ -72,10 +72,9 @@ export const app = {
                 dispatch.app.addTradeData({
                   result: res.length === 3 ? [res[2]] : res[1]
                 });
-              } else if (channelType === 'books') {
+              } else if (channelType === 'book') {
                 dispatch.app.addOrderBook({ result: res[1] });
               }
-              // console.log(res);
             }
           };
           ws.onclose = function(e) {

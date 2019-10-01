@@ -10,24 +10,16 @@ import { Table, Row, Rows } from 'react-native-table-component';
 
 function Trade({ tradeData = [] }) {
   const tableHead = ['', 'TIME', 'AMOUNT', 'PRICE'];
-  // const tableData = tradeData
-  //   .map(data => {
-  //     const [id, ...rest] = data;
-  //     const time = new Date(data[1]);
-  //     if (!time) return;
-  //     data[0] = data[2] > 0 ? '^' : 'v';
-  //     data[1] = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
-  //     return data;
-  //   })
-  //   .filter((data, i) => data.length && i < 20);
-  const tableData = tradeData.map(data => {
-    const isHigher = data[2] > 0 ? '^' : 'v';
-    const time = new Date(data[1]);
-    const date = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
-    const amount = data[2].toFixed(4);
-    const price = data[3].toFixed(1);
-    return [isHigher, date, amount, price];
-  });
+  const tableData = tradeData
+    .map(data => {
+      const isHigher = data[2] > 0 ? '^' : 'v';
+      const time = new Date(data[1]);
+      const date = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
+      const amount = data[2].toFixed(4);
+      const price = data[3].toFixed(1);
+      return [isHigher, date, amount, price];
+    })
+    .filter((data, i) => i < 20 && data.length > 0);
   return (
     <View style={{ flex: 1 }}>
       <Collapse
@@ -40,7 +32,11 @@ function Trade({ tradeData = [] }) {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: 6
+              padding: 9,
+              borderBottomWidth: 2,
+              borderBottomColor: '#000',
+              borderTopWidth: 2,
+              borderTopColor: '#000'
             }}
           >
             <Text

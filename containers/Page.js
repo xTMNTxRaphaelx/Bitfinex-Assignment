@@ -26,7 +26,7 @@ function Page(props) {
           justifyContent: 'space-between',
           backgroundColor: '#2b3940',
           borderBottomWidth: 2,
-          paddingTop: 30,
+          paddingTop: 32,
           paddingBottom: 15,
           paddingLeft: 9,
           paddingRight: 9,
@@ -64,9 +64,24 @@ function Page(props) {
         }}
       >
         <View>
-          <Button onPress={e => props.setSymbol('tBTCUSD')} title="BTC/USD" />
-          <Button onPress={e => props.setSymbol('tLTCUSD')} title="LTC/USD" />
-          <Button onPress={e => props.setSymbol('tETHUSD')} title="ETH/USD" />
+          <Button
+            style={{ padding: 9, marginBottom: 9 }}
+            color="#f194ff"
+            onPress={e => props.setSymbol('tBTCUSD')}
+            title="BTC/USD"
+          />
+          <Button
+            style={{ padding: 9, marginBottom: 9 }}
+            color="#f194ff"
+            onPress={e => props.setSymbol('tLTCUSD')}
+            title="LTC/USD"
+          />
+          <Button
+            style={{ padding: 9, marginBottom: 9 }}
+            color="#f194ff"
+            onPress={e => props.setSymbol('tETHUSD')}
+            title="ETH/USD"
+          />
           <Button
             title="Click To Close Modal"
             onPress={() => {
