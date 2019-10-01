@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import { connect } from 'react-redux';
 import Ticker from '../components/Ticker';
@@ -6,7 +6,9 @@ import TradeTable from '../components/Trade';
 import OrderTable from '../components/Order';
 
 function Page(props) {
-  console.log('page', props);
+  useEffect(() => {
+    props.initWS();
+  }, []);
   return (
     <View style={{ padding: 6 }}>
       <View
@@ -29,11 +31,14 @@ function Page(props) {
 }
 
 export default connect(
-  ({ app: { ticker, trade, order, symbol } }) => ({
+  ({ app: { ticker, trades, books, symbol } }) => ({
     tickerData: ticker[symbol],
-    tradeData: trade[symbol],
-    orderData: order[symbol],
+    tradeData: trades[symbol],
+    orderData: books[symbol],
     symbol
   }),
-  dispatch => ({ initSymbol: dispatch.app.initSymbol })
+  dispatch => ({
+    initSymbol: dispatch.app.initSymbol,
+    initWS: dispatch.app.initWS
+  })
 )(Page);
