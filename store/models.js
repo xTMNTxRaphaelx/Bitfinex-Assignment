@@ -25,6 +25,11 @@ export const app = {
       dispatch.app.getTradeData();
       dispatch.app.getOrderBook();
     },
+    // async getSymbols() {
+    //   const req = await fetch(`https://api-pub.bitfinex.com/v2/symbols`);
+    //   const res = await req.json();
+    //   dispatch.app.addTickerData({ result: res });
+    // },
     async getTickerData(payload, rootState) {
       const req = await fetch(
         `https://api-pub.bitfinex.com/v2/ticker/${rootState.app.symbol}`

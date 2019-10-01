@@ -17,18 +17,20 @@ function Ticker({ tickerData = [] }) {
   return (
     <View style={styles.tickerContainer}>
       <View style={styles.tickerRow}>
-        <Text style={styles.tickerText}>BTC/UESD</Text>
-        <Text style={styles.tickerText}>{BID}</Text>
+        <Text style={{ ...styles.tickerText, ...styles.largeText }}>
+          BTC/USD
+        </Text>
+        <Text style={{ ...styles.tickerText, ...styles.largeText }}>{BID}</Text>
       </View>
       <View style={styles.tickerRow}>
         <Text style={styles.tickerText}>Vol {VOLUME} BTC</Text>
         <Text style={styles.tickerText}>
-          {DAILY_CHANGE} ^ ({DAILY_CHANGE_PERC * 100}%)
+          {DAILY_CHANGE} ^ ({(DAILY_CHANGE_PERC || 0) * 100}%)
         </Text>
       </View>
       <View style={styles.tickerRow}>
-        <Text style={styles.tickerText}>LOW {LOW} BTC</Text>
-        <Text style={styles.tickerText}>HIGH {HIGH} BTC</Text>
+        <Text style={styles.tickerText}>LOW {LOW}</Text>
+        <Text style={styles.tickerText}>HIGH {HIGH}</Text>
       </View>
     </View>
   );
@@ -38,10 +40,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#2b3940'
   },
   tickerRow: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 6
   },
   tickerText: {
     color: '#fff'
+  },
+  largeText: {
+    fontSize: 18
   }
 });
 

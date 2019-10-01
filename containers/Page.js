@@ -8,8 +8,18 @@ function Page(props) {
   console.log('page', props);
   return (
     <View>
-      <Text>Welcome</Text>
-      <Button title="Press me" onPress={props.initSymbol} />
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginTop: 36,
+          padding: 9
+        }}
+      >
+        <Text>{props.symbol}</Text>
+        <Button title="Press me" onPress={props.initSymbol} />
+      </View>
       <Ticker tickerData={props.tickerData} symbol={props.symbol} />
       <TradeTable tradeData={props.tradeData} />
     </View>
