@@ -30,6 +30,8 @@ export const app = {
       return state;
     },
     addTradeData(state, payload) {
+      console.log('add trade data', payload);
+      if (payload.result === 'hb') return state;
       state['trades'][state.symbol] = [
         ...payload.result,
         ...(state['trades'][state.symbol] || [])

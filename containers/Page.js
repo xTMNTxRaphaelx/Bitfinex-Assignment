@@ -17,9 +17,6 @@ function Page(props) {
   useEffect(() => {
     props.initWS();
   }, []);
-  function changeToBTC(target) {
-    props.setSymbol('tLTCUSD');
-  }
   return (
     <View style={{ flex: 1 }}>
       <View
