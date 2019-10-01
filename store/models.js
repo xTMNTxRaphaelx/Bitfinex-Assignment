@@ -4,16 +4,11 @@ export const app = {
     ticker: {},
     trades: {},
     books: {},
-    subscribtions: {},
     symbol: 'tBTCUSD'
   }, // initial state
   reducers: {
     setWS(state, payload) {
       state['ws'] = payload;
-      return state;
-    },
-    setSubscribtion(state, { chanID, channel }) {
-      state['subscribtions'][chanID] = channel;
       return state;
     },
     addTickerData(state, payload) {
@@ -24,11 +19,17 @@ export const app = {
       return state;
     },
     addTradeData(state, payload) {
-      state['trades'][state.symbol] = payload.result;
+      state['trades'][state.symbol] = [
+        ...payload.result,
+        ...(state['trades'][state.symbol] || [])
+      ];
       return state;
     },
     addOrderBook(state, payload) {
-      state['books'][state.symbol] = payload.result;
+      state['books'][state.symbol] = [
+        ...payload.result,
+        ...(state['books'][state.symbol] || [])
+      ];
       return state;
     }
   },
@@ -46,10 +47,10 @@ export const app = {
           const chanID = res[0];
           const channelType = subscribtions[chanID];
           if (channelType === 'ticker') {
-            dispatch.app.addTickerData({ result: res });
+            dispatch.app.addTickerData({ result: res[1] });
           } else if (channelType === 'trades') {
             dispatch.app.addTradeData({
-              result: res.length === 3 ? res[2] : res[1]
+              result: res.length === 3 ? [res[2]] : res[1]
             });
           } else if (channelType === 'books') {
             dispatch.app.addOrderBook({ result: res[1] });
@@ -60,29 +61,30 @@ export const app = {
       dispatch.app.setWS(ws);
     },
     initSymbol() {
-      // dispatch.app.getTickerData();
-      // dispatch.app.getTradeData();
-      // dispatch.app.getOrderBook();
       dispatch.app.subscribeToSymbol();
     },
     subscribeToSymbol(payload, rootState) {
       const {
         app: { ws }
       } = rootState;
-      // let msg = JSON.stringify({
-      //   event: 'subscribe',
-      //   channel: 'ticker',
-      //   symbol: 'tBTCUSD'
-      // });
-      // ws.send(msg);
+      let msg = JSON.stringify({
+        event: 'subscribe',
+        channel: 'ticker',
+        symbol: 'tBTCUSD'
+      });
+      ws.send(msg);
       let msg2 = JSON.stringify({
         event: 'subscribe',
         channel: 'trades',
         symbol: 'tBTCUSD'
       });
       ws.send(msg2);
-      // rootState.ws && rootState.ws.on('open', () => rootState.ws.send(msg));
-      // rootState.ws && rootState.ws.on('open', () => rootState.ws.send(msg2));
+      let msg3 = JSON.stringify({
+        event: 'subscribe',
+        channel: 'book',
+        symbol: 'tBTCUSD'
+      });
+      ws.send(msg3);
     },
     // async getSymbols() {
     //   const req = await fetch(`https://api-pub.bitfinex.com/v2/symbols`);

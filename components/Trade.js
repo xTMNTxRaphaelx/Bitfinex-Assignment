@@ -48,7 +48,7 @@ function Trade({ tradeData = [] }) {
             }}
           >
             <Row data={tableHead} textStyle={{ color: '#fff' }} />
-            {tableData.map((rowData, index) => (
+            {(tableData || []).map((rowData, index) => (
               <Row
                 key={index}
                 data={rowData}
