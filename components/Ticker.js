@@ -17,7 +17,7 @@ function Ticker({ tickerData = [] }) {
   return (
     <View style={styles.tickerContainer}>
       <View style={styles.tickerRow}>
-        <Text style={styles.tickerText}>BTC/USD</Text>
+        <Text style={styles.tickerText}>BTC/UESD</Text>
         <Text style={styles.tickerText}>{BID}</Text>
       </View>
       <View style={styles.tickerRow}>
@@ -35,7 +35,7 @@ function Ticker({ tickerData = [] }) {
 }
 const styles = StyleSheet.create({
   tickerContainer: {
-    backgroundColor: '#000'
+    backgroundColor: '#2b3940'
   },
   tickerRow: {
     flexDirection: 'row'
