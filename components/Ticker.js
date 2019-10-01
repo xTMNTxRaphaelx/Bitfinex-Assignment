@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-function Ticker({ tickerData = [] }) {
+function Ticker({ symbol, tickerData = [] }) {
   const [
     BID,
     BID_SIZE,
@@ -18,34 +18,47 @@ function Ticker({ tickerData = [] }) {
     <View style={styles.tickerContainer}>
       <View style={styles.tickerRow}>
         <Text style={{ ...styles.tickerText, ...styles.largeText }}>
-          BTC/USD
+          {symbol}
         </Text>
         <Text style={{ ...styles.tickerText, ...styles.largeText }}>{BID}</Text>
       </View>
       <View style={styles.tickerRow}>
         <Text style={styles.tickerText}>
-          Vol {(VOLUME || 0).toFixed(1)} BTC
+          <Text style={styles.label}>Vol </Text>
+          {(VOLUME || 0).toFixed(1)} BTC
         </Text>
         <Text style={styles.tickerText}>
-          {DAILY_CHANGE} ^ ({((DAILY_CHANGE_PERC || 0) * 100).toFixed(1)}%)
+          {DAILY_CHANGE}
+          <Text
+            style={
+              DAILY_CHANGE_PERC > 0 ? { color: 'green' } : { color: 'red' }
+            }
+          >
+            {DAILY_CHANGE_PERC > 0 ? '^' : 'v'}
+          </Text>
+          ({((DAILY_CHANGE_PERC || 0) * 100).toFixed(1)}%)
         </Text>
       </View>
       <View style={styles.tickerRow}>
-        <Text style={styles.tickerText}>LOW {LOW}</Text>
-        <Text style={styles.tickerText}>HIGH {HIGH}</Text>
+        <Text style={styles.tickerText}>
+          <Text style={styles.label}>LOW </Text> {LOW}
+        </Text>
+        <Text style={styles.tickerText}>
+          <Text style={styles.label}>HIGH </Text> {HIGH}
+        </Text>
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
   tickerContainer: {
-    backgroundColor: '#2b3940',
-    borderRadius: 6,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 1
+    backgroundColor: '#18262e',
+    padding: 9,
+    marginTop: 15,
+    borderBottomWidth: 2,
+    borderBottomColor: '#000',
+    borderTopWidth: 2,
+    borderTopColor: '#000'
   },
   tickerRow: {
     flexDirection: 'row',
@@ -56,7 +69,10 @@ const styles = StyleSheet.create({
     color: '#fff'
   },
   largeText: {
-    fontSize: 18
+    fontSize: 24
+  },
+  label: {
+    color: 'rgba(255, 255, 255, 0.67)'
   }
 });
 
